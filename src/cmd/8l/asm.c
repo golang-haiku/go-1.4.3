@@ -499,7 +499,7 @@ adddynsym(Link *ctxt, LSym *s)
 			addaddr(ctxt, d, s);
 		
 		/* size */
-		adduint32(ctxt, d, 0);
+		adduint32(ctxt, d, s->size);
 	
 		/* type */
 		t = STB_GLOBAL << 4;
