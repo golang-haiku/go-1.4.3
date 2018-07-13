@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build darwin dragonfly freebsd linux netbsd openbsd solaris
+// +build darwin dragonfly freebsd haiku linux netbsd openbsd solaris
 
 #include <u.h>
 #include <dirent.h>
@@ -17,8 +17,11 @@ mktempdir(void)
 	
 	tmp = getenv("TMPDIR");
 	if(tmp == nil || strlen(tmp) == 0)
+#ifdef __HAIKU__
+		tmp = "/tmp";
+#else
 		tmp = "/var/tmp";
-	p = smprint("%s/go-link-XXXXXX", tmp);
+#endif	p = smprint("%s/go-link-XXXXXX", tmp);
 	if(mkdtemp(p) == nil)
 		return nil;
 	return p;
