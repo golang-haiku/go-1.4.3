@@ -72,6 +72,7 @@ archinit(void)
 	case Hdarwin:
 	case Hdragonfly:
 	case Hfreebsd:
+	case Hhaiku:
 	case Hlinux:
 	case Hnacl:
 	case Hnetbsd:
@@ -114,6 +115,7 @@ archinit(void)
 		break;
 	case Hlinux:		/* elf64 executable */
 	case Hfreebsd:		/* freebsd */
+	case Hhaiku:		/* haiku */
 	case Hnetbsd:		/* netbsd */
 	case Hopenbsd:		/* openbsd */
 	case Hdragonfly:	/* dragonfly */

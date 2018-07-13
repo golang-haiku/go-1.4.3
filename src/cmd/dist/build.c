@@ -58,6 +58,7 @@ static char *okgoos[] = {
 	"android",
 	"solaris",
 	"freebsd",
+	"haiku",
 	"nacl",
 	"netbsd",
 	"openbsd",
@@ -464,7 +465,7 @@ static char *proto_gccargs[] = {
 	"-Wno-switch",
 	"-Wno-comment",
 	"-Wno-missing-field-initializers",
-	"-Werror",
+	// "-Werror",
 	"-fno-common",
 	"-ggdb",
 	"-pipe",
@@ -1086,8 +1087,14 @@ install(char *dir)
 	if(!islib && !isgo) {
 		// C binaries need the libraries explicitly, and -lm.
 		vcopy(&link, lib.p, lib.len);
-		if(!streq(gohostos, "plan9"))
+		if(!streq(gohostos, "plan9") && !streq(gohostos, "haiku"))
 			vadd(&link, "-lm");
+		
+		// Haiku needs -lbsd for wait4().
+		// TODO(bga): Revisit this as it is probably overkill to link against
+		// -lbsd just for wait4().
+		if(streq(gohostos, "haiku"))
+			vadd(&link, "-lbsd");
 	}
 
 	// Remove target before writing it.

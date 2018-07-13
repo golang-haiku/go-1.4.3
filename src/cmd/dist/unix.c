@@ -466,7 +466,11 @@ xworkdir(void)
 
 	xgetenv(&b, "TMPDIR");
 	if(b.len == 0)
+#if defined(__HAIKU__)
+		bwritestr(&b, "/tmp");
+#else
 		bwritestr(&b, "/var/tmp");
+#endif
 	if(b.p[b.len-1] != '/')
 		bwrite(&b, "/", 1);
 	bwritestr(&b, "go-cbuild-XXXXXX");
@@ -695,6 +699,14 @@ main(int argc, char **argv)
 		gohostarch = "amd64";
 	if(contains(bstr(&b), "i386"))
 		gohostarch = "386";
+#elif defined(__HAIKU__)
+	gohostos = "haiku";
+	// Under a Haiku PC, uname -m will always print BePC.
+	run(&b, nil, 0, "uname", "-p", nil);
+	if(contains(bstr(&b), "x86_64"))
+		gohostarch = "amd64";
+	else if(contains(bstr(&b), "x86"))
+		gohostarch = "386";	 
 #else
 	fatal("unknown operating system");
 #endif

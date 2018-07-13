@@ -150,6 +150,8 @@ main(int argc, char *argv[])
 	ctxt->headtype = HEADTYPE;
 	if(headstring == nil)
 		headstring = headstr(HEADTYPE);
+	if(HEADTYPE == Hhaiku)
+		linkmode = LinkExternal;
 
 	archinit();
 	ctxt->debugfloat = debug['F'];

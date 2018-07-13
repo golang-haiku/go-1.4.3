@@ -197,7 +197,7 @@ asmelfsym(void)
 	elfbind = STB_LOCAL;
 	genasmsym(putelfsym);
 	
-	if(linkmode == LinkExternal && HEADTYPE != Hopenbsd) {
+	if(linkmode == LinkExternal && HEADTYPE != Hopenbsd && HEADTYPE != Hhaiku) {
 		s = linklookup(ctxt, "runtime.tlsg", 0);
 		if(s->sect == nil) {
 			ctxt->cursym = nil;

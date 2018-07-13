@@ -155,7 +155,7 @@ relocsym(LSym *s)
 			continue;
 
 		// Solaris needs the ability to reference dynimport symbols.
-		if(HEADTYPE != Hsolaris && r->sym != S && r->sym->type == SDYNIMPORT)
+		if(HEADTYPE != Hsolaris && HEADTYPE != Hhaiku && r->sym != S && r->sym->type == SDYNIMPORT)
 			diag("unhandled relocation for %s (type %d rtype %d)", r->sym->name, r->sym->type, r->type);
 		if(r->sym != S && r->sym->type != STLSBSS && !r->sym->reachable)
 			diag("unreachable sym in relocation: %s %s", s->name, r->sym->name);
@@ -188,7 +188,7 @@ relocsym(LSym *s)
 				o = r->add;
 			break;
 		case R_TLS_LE:
-			if(linkmode == LinkExternal && iself && HEADTYPE != Hopenbsd) {
+			if(linkmode == LinkExternal && iself && HEADTYPE != Hopenbsd && HEADTYPE != Hhaiku) {
 				r->done = 0;
 				r->sym = ctxt->tlsg;
 				r->xsym = ctxt->tlsg;
@@ -202,7 +202,7 @@ relocsym(LSym *s)
 			break;
 
 		case R_TLS_IE:
-			if(linkmode == LinkExternal && iself && HEADTYPE != Hopenbsd) {
+			if(linkmode == LinkExternal && iself && HEADTYPE != Hopenbsd && HEADTYPE != Hhaiku) {
 				r->done = 0;
 				r->sym = ctxt->tlsg;
 				r->xsym = ctxt->tlsg;
@@ -1088,7 +1088,7 @@ dodata(void)
 		diag("data or bss segment too large");
 	}
 	
-	if(iself && linkmode == LinkExternal && s != nil && s->type == STLSBSS && HEADTYPE != Hopenbsd) {
+	if(iself && linkmode == LinkExternal && s != nil && s->type == STLSBSS && HEADTYPE != Hopenbsd && HEADTYPE != Hhaiku) {
 		sect = addsection(&segdata, ".tbss", 06);
 		sect->align = PtrSize;
 		sect->vaddr = 0;

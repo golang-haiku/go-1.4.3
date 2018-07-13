@@ -267,7 +267,7 @@ main(int argc, char *argv[])
 	goos = getgoos();
 
 	nacl = strcmp(goos, "nacl") == 0;
-	if(nacl)
+	if(nacl || strcmp(goos, "haiku") == 0)
 		flag_largemodel = 1;
 
 	setexp();

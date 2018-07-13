@@ -41,6 +41,7 @@
 
 char linuxdynld[] = "/lib64/ld-linux-x86-64.so.2";
 char freebsddynld[] = "/libexec/ld-elf.so.1";
+char haikudynld[] = "/system/runtime_loader";
 char openbsddynld[] = "/usr/libexec/ld.so";
 char netbsddynld[] = "/libexec/ld.elf_so";
 char dragonflydynld[] = "/usr/libexec/ld-elf.so.2";
@@ -301,7 +302,15 @@ elfreloc1(Reloc *r, vlong sectoff)
 
 	case R_PCREL:
 		if(r->siz == 4) {
-			VPUT(R_X86_64_PC32 | (uint64)elfsym<<32);
+			// HACK to fix relocation issue with Haiku //
+			if(HEADTYPE == Hhaiku) {
+				if(r->xsym->type == SDYNIMPORT)
+					VPUT(R_X86_64_GOTPCREL | (uint64)elfsym<<32);
+				else
+					VPUT(R_X86_64_PC32 | (uint64)elfsym<<32);
+			////
+			} else
+				VPUT(R_X86_64_PC32 | (uint64)elfsym<<32);
 		} else
 			return -1;
 		break;
@@ -674,6 +683,7 @@ asmb(void)
 		break;
 	case Hlinux:
 	case Hfreebsd:
+	case Hhaiku:
 	case Hnetbsd:
 	case Hopenbsd:
 	case Hdragonfly:
@@ -705,6 +715,7 @@ asmb(void)
 			break;
 		case Hlinux:
 		case Hfreebsd:
+		case Hhaiku:
 		case Hnetbsd:
 		case Hopenbsd:
 		case Hdragonfly:
@@ -787,6 +798,7 @@ asmb(void)
 		break;
 	case Hlinux:
 	case Hfreebsd:
+	case Hhaiku:
 	case Hnetbsd:
 	case Hopenbsd:
 	case Hdragonfly:

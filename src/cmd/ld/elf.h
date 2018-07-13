@@ -1007,6 +1007,7 @@ void	asmbelf(vlong symo);
 void	asmbelfsetup(void);
 extern char linuxdynld[];
 extern char freebsddynld[];
+extern char haikudynld[];
 extern char netbsddynld[];
 extern char openbsddynld[];
 extern char dragonflydynld[];

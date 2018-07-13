@@ -208,7 +208,9 @@ loadlib(void)
 		// The startup code uses an import of runtime/cgo to decide
 		// whether to initialize the TLS.  So give it one.  This could
 		// be handled differently but it's an unusual case.
-		loadinternal("runtime/cgo");
+		if(HEADTYPE != Hhaiku)
+			loadinternal("runtime/cgo");
+
 		if(i < ctxt->libraryp)
 			objfile(ctxt->library[i].file, ctxt->library[i].pkg);
 
@@ -290,7 +292,7 @@ loadlib(void)
 	// binaries, so leave it enabled on OS X (Mach-O) binaries.
 	// Also leave it enabled on Solaris which doesn't support
 	// statically linked binaries.
-	if(!flag_shared && !havedynamic && HEADTYPE != Hdarwin && HEADTYPE != Hsolaris)
+	if(!flag_shared && !havedynamic && HEADTYPE != Hdarwin && HEADTYPE != Hsolaris && HEADTYPE != Hhaiku)
 		debug['d'] = 1;
 	
 	importcycles();
@@ -622,6 +624,9 @@ hostlink(void)
 	
 	if(rpath)
 		argv[argc++] = smprint("-Wl,-rpath,%s", rpath);
+	
+	if(iself && HEADTYPE != Hhaiku)
+		argv[argc++] = "-rdynamic";
 
 	// Force global symbols to be exported for dlopen, etc.
 	if(iself)

@@ -129,7 +129,7 @@ main(int argc, char *argv[])
 		ewidth[TIND] = 4;
 		
 	nacl = strcmp(getgoos(), "nacl") == 0;
-	if(nacl)
+	if(nacl || strcmp(getgoos(), "haiku") == 0)
 		flag_largemodel = 1;
 
 	quotefmtinstall(); // before cinit, which overrides %Q
