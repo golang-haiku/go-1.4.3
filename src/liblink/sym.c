@@ -48,6 +48,7 @@ static struct {
 	{"darwin",	Hdarwin},
 	{"dragonfly",	Hdragonfly},
 	{"elf",		Helf},
+	{"haiku",	Hhaiku},
 	{"freebsd",	Hfreebsd},
 	{"linux",	Hlinux},
 	{"nacl",		Hnacl},
@@ -129,6 +130,12 @@ linknew(LinkArch *arch)
 		sysfatal("unknown thread-local storage offset for %s", headstr(ctxt->headtype));
 	case Hplan9:
 	case Hwindows:
+		break;
+	case Hhaiku: /* FIXME */
+		// on 64-bit we use the last two regular TLS slots
+		if(ctxt->arch->thechar == '6') {
+			ctxt->tlsoffset = (64 - 2) * 8;
+		}
 		break;
 	case Hlinux:
 	case Hfreebsd:

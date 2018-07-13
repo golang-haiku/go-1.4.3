@@ -1545,7 +1545,12 @@ isextern(LSym *s)
 {
 	// All the Solaris dynamic imports from libc.so begin with "libc·", which
 	// the compiler rewrites to "libc." by the time liblink gets it.
+	// Haiku also uses this for dynamic imports but from libroot instead.
+#if defined(__HAIKU__)
+	return strncmp(s->name, "libroot.", 9) == 0;
+#else
 	return strncmp(s->name, "libc.", 5) == 0;
+#endif
 }
 
 // single-instruction no-ops of various lengths.
@@ -3412,6 +3417,19 @@ mfound:
 			pp.from.scale = 0;
 			ctxt->rexflag |= Pw;
 			*ctxt->andptr++ = 0x65; // GS
+			*ctxt->andptr++ = 0x8B;
+			asmand(ctxt, &pp.from, &p->to);
+			break;
+		
+		case Hhaiku:
+			// Haiku TLS base is 0(FS).
+			pp.from = p->from;
+			pp.from.type = D_INDIR+D_GS;
+			pp.from.offset = 0;
+			pp.from.index = D_NONE;
+			pp.from.scale = 0;
+			ctxt->rexflag |= Pw;
+			*ctxt->andptr++ = 0x64; // FS
 			*ctxt->andptr++ = 0x8B;
 			asmand(ctxt, &pp.from, &p->to);
 			break;

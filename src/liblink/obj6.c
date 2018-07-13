@@ -103,6 +103,7 @@ static int
 canuselocaltls(Link *ctxt)
 {
 	switch(ctxt->headtype) {
+	case Hhaiku:
 	case Hplan9:
 	case Hwindows:
 		return 0;
