@@ -495,6 +495,7 @@ enum {
 	Hdragonfly,
 	Helf,
 	Hfreebsd,
+	Hhaiku,
 	Hlinux,
 	Hnacl,
 	Hnetbsd,

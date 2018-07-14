@@ -361,7 +361,7 @@ func allowed(pkg string) map[string]bool {
 }
 
 var bools = []bool{false, true}
-var geese = []string{"android", "darwin", "dragonfly", "freebsd", "linux", "nacl", "netbsd", "openbsd", "plan9", "solaris", "windows"}
+var geese = []string{"android", "darwin", "dragonfly", "freebsd", "haiku", "linux", "nacl", "netbsd", "openbsd", "plan9", "solaris", "windows"}
 var goarches = []string{"386", "amd64", "arm"}
 
 type osPkg struct {
