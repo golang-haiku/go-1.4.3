@@ -608,6 +608,8 @@ scavengelist(MSpan *list, uint64 now, uint64 limit)
 void
 runtime·MHeap_Scavenge(int32 k, uint64 now, uint64 limit)
 {
+	//HACK: Disable GC for Haiku
+	/*
 	uint32 i;
 	uintptr sumreleased;
 	MHeap *h;
@@ -629,6 +631,7 @@ runtime·MHeap_Scavenge(int32 k, uint64 now, uint64 limit)
 			k, mstats.heap_inuse>>20, mstats.heap_idle>>20, mstats.heap_sys>>20,
 			mstats.heap_released>>20, (mstats.heap_sys - mstats.heap_released)>>20);
 	}
+	*/
 }
 
 void

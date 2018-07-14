@@ -89,7 +89,7 @@ func cgocall(fn, arg unsafe.Pointer) {
 
 //go:nosplit
 func cgocall_errno(fn, arg unsafe.Pointer) int32 {
-	if !iscgo && GOOS != "solaris" && GOOS != "windows" {
+	if !iscgo && GOOS != "solaris" && GOOS != "windows" && GOOS != "haiku" {
 		gothrow("cgocall unavailable")
 	}
 

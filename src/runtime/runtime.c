@@ -80,6 +80,7 @@ runtime·args(int32 c, uint8 **v)
 		runtime·sysargs(c, v);
 }
 
+int32 runtime·ishaiku;
 int32 runtime·isplan9;
 int32 runtime·issolaris;
 int32 runtime·iswindows;

@@ -392,6 +392,19 @@ struct	M
 		uintptr v[6];
 	} scratch;
 #endif
+#ifdef GOOS_haiku
+	int32*	perrno; 	// pointer to TLS errno
+	// these are here because they are too large to be on the stack
+	// of low-level NOSPLIT functions.
+	LibCall	libcall;
+	struct MTs {
+		int64	tv_sec;
+		int64	tv_nsec;
+	} ts;
+	struct MScratch {
+		uintptr v[6];
+	} scratch;
+#endif
 #ifdef GOOS_plan9
 	int8*	notesig;
 	byte*	errstr;
@@ -557,6 +570,15 @@ enum {
 #else
 enum {
    Solaris = 0
+};
+#endif
+#ifdef GOOS_haiku
+enum {
+   Haiku = 1
+};
+#else
+enum {
+   Haiku = 0
 };
 #endif
 #ifdef GOOS_plan9

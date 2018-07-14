@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build darwin nacl netbsd openbsd plan9 solaris windows
+// +build darwin haiku nacl netbsd openbsd plan9 solaris windows
 
 package runtime
 
@@ -200,7 +200,9 @@ func notetsleep_internal(n *note, ns int64, gp *g, deadline int64) bool {
 	for {
 		// Registered.  Sleep.
 		gp.m.blocked = true
-		if semasleep(ns) >= 0 {
+		// HACK for Haiku support.
+		if semasleep(deadline) >= 0 {
+			//if semasleep(ns) >= 0 {
 			gp.m.blocked = false
 			// Acquired semaphore, semawakeup unregistered us.
 			// Done.

@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // +build amd64 amd64p32
-// +build darwin dragonfly freebsd linux nacl netbsd openbsd solaris
+// +build darwin dragonfly freebsd haiku linux nacl netbsd openbsd solaris
 
 #include "runtime.h"
 #include "defs_GOOS_GOARCH.h"

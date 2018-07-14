@@ -60,6 +60,9 @@ needtls:
 	// skip TLS setup on Solaris
 	CMPL	runtime·issolaris(SB), $1
 	JEQ ok
+	// skip TLS setup on Haiku
+	CMPL	runtime·ishaiku(SB), $1
+	JEQ ok
 
 	LEAQ	runtime·tls0(SB), DI
 	CALL	runtime·settls(SB)
