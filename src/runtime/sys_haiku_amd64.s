@@ -13,11 +13,11 @@
 TEXT runtime·settls(SB),NOSPLIT,$8
 	RET
 
-// void libc·miniterrno(void *(*_errnop)(void));
+// void libc·miniterrno(void *(*___errno)(void));
 //
 // Set the TLS errno pointer in M.
 //
-// Called using runtime·asmcgocall from os_haiku.c:/minit.
+// Called using runtime·asmcgocall from os_solaris.c:/minit.
 // NOT USING GO CALLING CONVENTION.
 TEXT runtime·miniterrno(SB),NOSPLIT,$0
 	// asmcgocall will put first argument into DI.
@@ -33,16 +33,16 @@ TEXT runtime·miniterrno(SB),NOSPLIT,$0
 // clock_gettime(3c) wrapper because Timespec is too large for
 // runtime·nanotime stack.
 //
-// Called using runtime·sysvicall6 from os_haiku.c:/nanotime.
+// Called using runtime·sysvicall6 from os_solaris.c:/nanotime.
 // NOT USING GO CALLING CONVENTION.
 TEXT runtime·nanotime1(SB),NOSPLIT,$0
 	// need space for the timespec argument.
 	SUBQ	$64, SP	// 16 bytes will do, but who knows in the future?
-	MOVQ	$0xffffffffffffffff, DI	// CLOCK_REALTIME from <sys/time_impl.h>
+	MOVQ	$3, DI	// CLOCK_REALTIME from <sys/time_impl.h>
 	MOVQ	SP, SI
 	MOVQ	libc·clock_gettime(SB), AX
 	CALL	AX
-	MOVL	(SP), AX	// tv_sec from struct timespec
+	MOVQ	(SP), AX	// tv_sec from struct timespec
 	IMULQ	$1000000000, AX	// multiply into nanoseconds
 	ADDQ	8(SP), AX	// tv_nsec, offset should be stable.
 	ADDQ	$64, SP
@@ -348,4 +348,4 @@ TEXT time·now(SB),NOSPLIT,$8-12
 	IMULQ	$1000000000, DX
 	SUBQ	DX, CX
 	MOVL	CX, nsec+8(FP)
-	RET 
+	RET

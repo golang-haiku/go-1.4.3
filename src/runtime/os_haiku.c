@@ -386,6 +386,7 @@ runtime·close(int32 fd)
 	return runtime·sysvicall1(FUNC(libc·close), (uintptr)fd);
 }
 
+#pragma textflag NOSPLIT
 void
 runtime·exit(int32 r)
 {
