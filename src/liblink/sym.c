@@ -131,11 +131,12 @@ linknew(LinkArch *arch)
 	case Hplan9:
 	case Hwindows:
 		break;
-	case Hhaiku: /* FIXME */
-		// on 64-bit we use the last two regular TLS slots
-		if(ctxt->arch->thechar == '6') {
-			ctxt->tlsoffset = (64 - 2) * 8;
-		}
+	case Hhaiku:
+ 		/* FIXME */
+		// // on 64-bit we use the last two regular TLS slots
+		 if(ctxt->arch->thechar == '6') {
+		 	ctxt->tlsoffset = (64 - 2) * 8;
+		 }
 		break;
 	case Hlinux:
 	case Hfreebsd:

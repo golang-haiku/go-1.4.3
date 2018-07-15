@@ -1487,6 +1487,8 @@ elfobj:
 		eh->ident[EI_OSABI] = ELFOSABI_OPENBSD;
 	else if(HEADTYPE == Hdragonfly)
 		eh->ident[EI_OSABI] = ELFOSABI_NONE;
+	else if(HEADTYPE == Hhaiku)
+		eh->ident[EI_OSABI] = ELFOSABI_NONE;
 	if(elf64)
 		eh->ident[EI_CLASS] = ELFCLASS64;
 	else

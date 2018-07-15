@@ -611,6 +611,9 @@ hostlink(void)
 		argv[argc++] = "-Wl,-no_pie,-pagezero_size,4000000";
 	if(HEADTYPE == Hopenbsd)
 		argv[argc++] = "-Wl,-nopie";
+
+	if(HEADTYPE == Hhaiku)
+		argv[argc++] = "-fPIC";
 	
 	if(iself && AssumeGoldLinker)
 		argv[argc++] = "-Wl,--rosegment";
@@ -630,7 +633,7 @@ hostlink(void)
 
 	// Force global symbols to be exported for dlopen, etc.
 	if(iself)
-		argv[argc++] = "-rdynamic";
+		// argv[argc++] = "-rdynamic";
 
 	if(strstr(argv[0], "clang") != nil)
 		argv[argc++] = "-Qunused-arguments";
