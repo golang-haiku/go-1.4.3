@@ -2118,6 +2118,10 @@ func (b *builder) ccompilerCmd(envvar, defcmd, objdir string) []string {
 		a = append(a, "-fno-common")
 	}
 
+	if goos == "haiku" {
+		a = append(a, "-Wl, -Bsymbolic")
+	}
+
 	return a
 }
 
@@ -2381,6 +2385,8 @@ func (b *builder) cgo(p *Package, cgoExe, obj string, pcCFLAGS, pcLDFLAGS, gccfi
 	switch goos {
 	case "android", "dragonfly", "linux", "netbsd":
 		ldflags = append(ldflags, "-Wl,--build-id=none")
+	case "haiku":
+		ldflags = append(ldflags, "-fPIC")
 	}
 
 	if err := b.gccld(p, ofile, ldflags, gccObjs); err != nil {
