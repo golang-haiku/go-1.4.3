@@ -17,11 +17,12 @@ mktempdir(void)
 	
 	tmp = getenv("TMPDIR");
 	if(tmp == nil || strlen(tmp) == 0)
-#ifdef __HAIKU__
-		tmp = "/tmp";
-#else
-		tmp = "/var/tmp";
-#endif	p = smprint("%s/go-link-XXXXXX", tmp);
+		tmp = "/tmp/";
+//#ifdef __HAIKU__
+//#else
+//		tmp = "/var/tmp";
+//#endif	
+	p = smprint("%s/go-link-XXXXXX", tmp);
 	if(mkdtemp(p) == nil)
 		return nil;
 	return p;
