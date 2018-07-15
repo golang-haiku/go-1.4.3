@@ -683,11 +683,11 @@ asmb(void)
 		break;
 	case Hlinux:
 	case Hfreebsd:
-	case Hhaiku:
 	case Hnetbsd:
 	case Hopenbsd:
 	case Hdragonfly:
 	case Hsolaris:
+	case Hhaiku:
 		debug['8'] = 1;	/* 64-bit addresses */
 		break;
 	case Hnacl:
@@ -715,12 +715,12 @@ asmb(void)
 			break;
 		case Hlinux:
 		case Hfreebsd:
-		case Hhaiku:
 		case Hnetbsd:
 		case Hopenbsd:
 		case Hdragonfly:
 		case Hsolaris:
 		case Hnacl:
+		case Hhaiku:
 			symo = segdata.fileoff+segdata.filelen;
 			symo = rnd(symo, INITRND);
 			break;
