@@ -438,6 +438,7 @@ runtime·nanotime(void)
 	return (m->libcall.r1 * 1000000000LL) + m->libcall.r2;
 }
 
+// #pragma textflag NOSPLIT
 // void
 // time·now(int64 sec, int32 usec)
 // {

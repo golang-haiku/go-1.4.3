@@ -38,7 +38,8 @@ TEXT runtime·miniterrno(SB),NOSPLIT,$0
 TEXT runtime·nanotime1(SB),NOSPLIT,$0
 	// need space for the timespec argument.
 	SUBQ	$64, SP	// 16 bytes will do, but who knows in the future?
-	MOVQ	$3, DI	// CLOCK_REALTIME from <sys/time_impl.h>
+	MOVQ	$0xffffffffffffffff, DI	// CLOCK_REALTIME from <sys/time_impl.h>
+	//MOVQ	$3, DI	// CLOCK_REALTIME from <sys/time_impl.h>
 	MOVQ	SP, SI
 	MOVQ	libc·clock_gettime(SB), AX
 	CALL	AX
