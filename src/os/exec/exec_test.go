@@ -76,6 +76,9 @@ func TestCommandRelativeName(t *testing.T) {
 }
 
 func TestCatStdin(t *testing.T) {
+	if runtime.GOOS == "haiku" {
+		t.Skip("skipping on haiku")
+	}
 	// Cat, testing stdin and stdout.
 	input := "Input string\nLine 2"
 	p := helperCommand(t, "cat")

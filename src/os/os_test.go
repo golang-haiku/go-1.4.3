@@ -70,6 +70,14 @@ var sysdir = func() (sd *sysDir) {
 				"local",
 			},
 		}
+	case "haiku":
+		sd = &sysDir{
+			"/system/settings/etc",
+			[]string{
+				"group",
+				"passwd",
+			},
+		}
 	default:
 		sd = &sysDir{
 			"/etc",
@@ -308,6 +316,12 @@ func smallReaddirnames(file *File, length int, t *testing.T) []string {
 // as reading it all at once.
 func TestReaddirnamesOneAtATime(t *testing.T) {
 	// big directory that doesn't change often.
+	switch runtime.GOOS {
+	case "haiku":
+		// Haiku doesn't really have a standard /bin path
+		t.Skipf("skipping test on %v", runtime.GOOS)
+	}
+
 	dir := "/usr/bin"
 	switch runtime.GOOS {
 	case "android":
@@ -316,6 +330,8 @@ func TestReaddirnamesOneAtATime(t *testing.T) {
 		dir = "/bin"
 	case "windows":
 		dir = Getenv("SystemRoot") + "\\system32"
+	case "haiku":
+		dir = "/boot/system/bin"
 	}
 	file, err := Open(dir)
 	if err != nil {
@@ -332,6 +348,7 @@ func TestReaddirnamesOneAtATime(t *testing.T) {
 	}
 	defer file1.Close()
 	small := smallReaddirnames(file1, len(all)+100, t) // +100 in case we screw up
+
 	if len(small) < len(all) {
 		t.Fatalf("len(small) is %d, less than %d", len(small), len(all))
 	}
@@ -493,7 +510,7 @@ func TestReaddirStatFailures(t *testing.T) {
 
 func TestHardLink(t *testing.T) {
 	// Hardlinks are not supported under windows or Plan 9.
-	if runtime.GOOS == "plan9" {
+	if runtime.GOOS == "plan9" || runtime.GOOS == "haiku"{
 		return
 	}
 	from, to := "hardlinktestfrom", "hardlinktestto"
@@ -847,6 +864,8 @@ func TestChdirAndGetwd(t *testing.T) {
 	switch runtime.GOOS {
 	case "android":
 		dirs = []string{"/", "/system/bin"}
+	case "haiku":
+		dirs = []string{"/", "/boot/system/bin"}
 	case "plan9":
 		dirs = []string{"/", "/usr"}
 	}

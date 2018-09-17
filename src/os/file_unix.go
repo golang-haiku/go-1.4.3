@@ -311,6 +311,9 @@ func TempDir() string {
 	if dir == "" {
 		if runtime.GOOS == "android" {
 			dir = "/data/local/tmp"
+		}
+		if runtime.GOOS == "haiku" {
+			dir = "/boot/system/cache/tmp"
 		} else {
 			dir = "/tmp"
 		}
