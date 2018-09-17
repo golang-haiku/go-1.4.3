@@ -22,6 +22,7 @@ import (
 	"os"
 	"sync"
 	"time"
+	"runtime"
 )
 
 // A dnsConn represents a DNS transport endpoint.
@@ -223,7 +224,12 @@ var onceLoadConfig sync.Once
 
 // Assume dns config file is /etc/resolv.conf here
 func loadDefaultConfig() {
-	loadConfig("/etc/resolv.conf", 5*time.Second, nil)
+	if runtime.GOOS != "haiku" {
+		loadConfig("/etc/resolv.conf", 5*time.Second, nil)
+	} else {
+		loadConfig("/boot/system/settings/network/resolv.conf", 5*time.Second, nil)
+	}
+
 }
 
 func loadConfig(resolvConfPath string, reloadTime time.Duration, quit <-chan chan struct{}) {

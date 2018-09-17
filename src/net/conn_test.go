@@ -33,12 +33,12 @@ func TestConnAndListener(t *testing.T) {
 		switch tt.net {
 		case "unix":
 			switch runtime.GOOS {
-			case "nacl", "plan9", "windows":
+			case "haiku", "nacl", "plan9", "windows":
 				continue
 			}
 		case "unixpacket":
 			switch runtime.GOOS {
-			case "android", "darwin", "nacl", "openbsd", "plan9", "windows":
+			case "android", "darwin", "haiku", "nacl", "openbsd", "plan9", "windows":
 				continue
 			case "freebsd": // FreeBSD 8 doesn't support unixpacket
 				continue
