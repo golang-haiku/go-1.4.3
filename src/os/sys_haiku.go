@@ -4,6 +4,8 @@
 
 package os
 
+import "syscall"
+
 func hostname() (name string, err error) {
-	panic("Not implemented")
+	return syscall.Gethostname()
 }

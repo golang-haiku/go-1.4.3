@@ -29,6 +29,7 @@ var (
 	libc__kern_generic_syscall,
 	libc_fork,
 	libc_waitpid,
+//	libc_wait4,
 	libc_write,
 	pipe1 libcFunc
 )
@@ -323,18 +324,20 @@ func syscall_syscall(trap, a1, a2, a3 uintptr) (r1, r2, err uintptr) {
 	return call.r1, call.r2, call.err
 }
 
+/*
 //go:nosplit
-func syscall_wait4(pid uintptr, wstatus *uint32, options uintptr, rusage unsafe.Pointer) (wpid int, err uintptr) {
+func syscall_wait4(pid uintptr, wstatus *uint32, options uintptr) (wpid int, err uintptr) {
 	call := libcall{
 		fn:   uintptr(unsafe.Pointer(&libc_waitpid)),
-		n:    4,
+		n:    3,
 		args: uintptr(unsafe.Pointer(&pid)),
 	}
-	//entersyscallblock()
-	//asmcgocall(unsafe.Pointer(&asmsysvicall6), unsafe.Pointer(&call))
-	//exitsyscall()
+	entersyscallblock()
+	asmcgocall(unsafe.Pointer(&asmsysvicall6), unsafe.Pointer(&call))
+	exitsyscall()
 	return int(call.r1), call.err
 }
+*/
 
 //go:nosplit
 func syscall_write(fd, buf, nbyte uintptr) (n, err uintptr) {

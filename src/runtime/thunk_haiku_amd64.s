@@ -79,9 +79,9 @@ TEXT runtime·libc_syscall(SB),NOSPLIT,$0
 	MOVQ	libc·_kern_generic_syscall(SB), AX
 	JMP	AX
 
-TEXT runtime·libc_wait4(SB),NOSPLIT,$0
-	MOVQ	libc·waitpid(SB), AX
-	JMP	AX
+//TEXT runtime·libc_wait4(SB),NOSPLIT,$0
+//	MOVQ	libc·waitpid(SB), AX
+//	JMP	AX
 
 TEXT runtime·libc_write(SB),NOSPLIT,$0
 	MOVQ	libc·write(SB), AX

@@ -22,4 +22,5 @@
 #pragma dynimport libc·setpgid setsid "libroot.so"
 #pragma dynimport libc·_kern_generic_syscall _kern_generic_syscall "libroot.so"
 #pragma dynimport libc·fork fork "libroot.so"
-#pragma dynimport libc·waitpid waitpid "libroot.so"
+//#pragma dynimport libc·waitpid waitpid "libroot.so"
+#pragma dynimport libc·wait4 wait4 "libbsd.so"

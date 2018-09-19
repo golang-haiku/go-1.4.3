@@ -15,4 +15,4 @@ TEXT main(SB),NOSPLIT,$-8
 	JMP	AX
 
 DATA runtime·ishaiku(SB)/4, $1
-GLOBL runtime·ishaiku(SB), $4
+GLOBL runtime·ishaiku(SB), NOPTR, $4
