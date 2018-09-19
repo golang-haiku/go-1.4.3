@@ -94,6 +94,10 @@ func SlicePtrFromStrings(ss []string) ([]*byte, error) {
 func CloseOnExec(fd int) { fcntl(fd, F_SETFD, FD_CLOEXEC) }
 
 func SetNonblock(fd int, nonblocking bool) (err error) {
+	if runtime.GOOS == "haiku" {
+		// FIXME: Haiku does not have a working netpoller yet.
+		return nil
+	}
 	flag, err := fcntl(fd, F_GETFL, 0)
 	if err != nil {
 		return err

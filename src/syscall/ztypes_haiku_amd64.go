@@ -213,5 +213,5 @@ type Termios struct {
 }
 
 const (
-	F_DUPFD_CLOEXEC = 0xdeadf00d
+	F_DUPFD_CLOEXEC = 0x0200
 )

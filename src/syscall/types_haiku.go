@@ -166,5 +166,5 @@ type Termios C.struct_termios
 // Fake constant needed by net package
 
 const (
-	F_DUPFD_CLOEXEC = 0xdeadf00d
+	F_DUPFD_CLOEXEC = 0x0200
 )

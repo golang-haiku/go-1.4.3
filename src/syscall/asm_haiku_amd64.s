@@ -77,8 +77,8 @@ TEXT ·setpgid(SB),NOSPLIT,$0
 TEXT ·Syscall(SB),NOSPLIT,$0
 	JMP	runtime·syscall_syscall(SB)
 
-TEXT ·wait4(SB),NOSPLIT,$0
-	JMP	runtime·syscall_wait4(SB)
+//TEXT ·wait4(SB),NOSPLIT,$0
+//	JMP	runtime·syscall_wait4(SB)
 
 TEXT ·dup2(SB),NOSPLIT,$0
 	JMP	runtime·syscall_dup2(SB)
