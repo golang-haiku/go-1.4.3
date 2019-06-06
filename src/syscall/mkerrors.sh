@@ -84,6 +84,10 @@ includes_FreeBSD='
 #endif
 '
 
+includes_Haiku='
+#include <support/Errors.h>
+'
+
 includes_Linux='
 #define _LARGEFILE_SOURCE
 #define _LARGEFILE64_SOURCE
@@ -213,7 +217,9 @@ includes='
 #include <netinet/ip6.h>
 #include <netinet/tcp.h>
 #include <errno.h>
+#if !defined(__HAIKU__)
 #include <sys/signal.h>
+#endif
 #include <signal.h>
 #include <sys/resource.h>
 '
@@ -334,7 +340,12 @@ cat _error.out | grep -vf _error.grep | grep -vf _signal.grep
 echo
 echo '// Errors'
 echo 'const ('
-cat _error.out | grep -f _error.grep | sed 's/=\(.*\)/= Errno(\1)/'
+if [ "$(uname)" == "Haiku" ]
+then
+	cat _error.out | grep -f _error.grep | sed 's/=\(.*\)/= Errno(\1 \& 0xffffffff)/'
+else
+	cat _error.out | grep -f _error.grep | sed 's/=\(.*\)/= Errno(\1)/'
+fi
 echo ')'
 
 echo
