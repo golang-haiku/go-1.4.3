@@ -252,7 +252,7 @@ func (w WaitStatus) StopSignal() Signal {
 
 func (w WaitStatus) TrapCause() int { return -1 }
 
-//sys Wait4(pid int32, wstatus *WaitStatus, options uintptr, rusage *Rusage) (wpid int, err error) = libroot.waitpid
+//sys Wait4(pid int, wstatus *WaitStatus, options uintptr, rusage *Rusage) (wpid int, err error) = libroot.waitpid
 
 func gethostname() (name string, err uintptr)
 

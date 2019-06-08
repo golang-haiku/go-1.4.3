@@ -207,4 +207,3 @@ type Termios struct {
 	Cc        [11]uint8
 	Pad_cgo_0 [2]byte
 }
-
