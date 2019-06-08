@@ -19,14 +19,14 @@ type (
 )
 
 type Timespec struct {
-	Sec       int32
-	Pad_cgo_0 [4]byte
-	Nsec      int64
+	Sec  int64
+	Nsec int64
 }
 
 type Timeval struct {
-	Sec  int32
-	Usec int32
+	Sec       int64
+	Usec      int32
+	Pad_cgo_0 [4]byte
 }
 
 type Rusage struct {
@@ -105,15 +105,16 @@ type RawSockaddrUnix struct {
 }
 
 type RawSockaddrDatalink struct {
-	Len    uint8
-	Family uint8
-	E_type uint16
-	Index  uint32
-	Type   uint8
-	Nlen   uint8
-	Alen   uint8
-	Slen   uint8
-	Data   [20]uint8
+	Len       uint8
+	Family    uint8
+	E_type    uint16
+	Index     uint32
+	Type      uint8
+	Nlen      uint8
+	Alen      uint8
+	Slen      uint8
+	Data      [46]uint8
+	Pad_cgo_0 [2]byte
 }
 
 type RawSockaddr struct {
@@ -166,10 +167,6 @@ type Cmsghdr struct {
 	Level int32
 	Type  int32
 }
-type IPv6MTUInfo struct {
-	Addr RawSockaddrInet6
-	Mtu  uint32
-}
 
 type Inet6Pktinfo struct {
 	Addr    [16]byte /* in6_addr */
@@ -185,13 +182,12 @@ const (
 	SizeofSockaddrInet6    = 0x1c
 	SizeofSockaddrAny      = 0x80
 	SizeofSockaddrUnix     = 0x80
-	SizeofSockaddrDatalink = 0x20
+	SizeofSockaddrDatalink = 0x3c
 	SizeofLinger           = 0x8
 	SizeofIPMreq           = 0x8
 	SizeofIPv6Mreq         = 0x14
 	SizeofMsghdr           = 0x30
 	SizeofCmsghdr          = 0xc
-	SizeofIPv6MTUInfo      = 0x20
 	SizeofInet6Pktinfo     = 0x14
 	SizeofICMPv6Filter     = 0x20
 )
@@ -212,6 +208,3 @@ type Termios struct {
 	Pad_cgo_0 [2]byte
 }
 
-const (
-	F_DUPFD_CLOEXEC = 0x0200
-)

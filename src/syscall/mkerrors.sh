@@ -84,10 +84,6 @@ includes_FreeBSD='
 #endif
 '
 
-includes_Haiku='
-#define B_USE_POSITIVE_POSIX_ERRORS 1
-'
-
 includes_Linux='
 #define _LARGEFILE_SOURCE
 #define _LARGEFILE64_SOURCE
@@ -226,11 +222,6 @@ includes='
 
 ccflags="$@"
 
-if [ "$(uname)" == "Haiku" ]
-then
-	ccflags="$ccflags -DB_USE_POSITIVE_POSIX_ERRORS=1"
-fi	
-
 # Write go tool cgo -godefs input.
 (
 	echo package syscall
@@ -345,7 +336,12 @@ cat _error.out | grep -vf _error.grep | grep -vf _signal.grep
 echo
 echo '// Errors'
 echo 'const ('
-cat _error.out | grep -f _error.grep | sed 's/=\(.*\)/= Errno(\1)/'
+if [ "$(uname)" == "Haiku" ]
+then
+	cat _error.out | grep -f _error.grep | sed 's/=\(.*\)/= Errno(\1 \& 0xffffffff)/'
+else
+	cat _error.out | grep -f _error.grep | sed 's/=\(.*\)/= Errno(\1)/'
+fi
 echo ')'
 
 echo
@@ -408,15 +404,15 @@ main(void)
 		e = errors[i];
 		if(i > 0 && errors[i-1] == e)
 			continue;
-#if defined(__HAIKU__)
-		strcpy(buf, strerror(-e));
-#else
 		strcpy(buf, strerror(e));
-#endif
 		// lowercase first letter: Bad -> bad, but STREAM -> STREAM.
 		if(A <= buf[0] && buf[0] <= Z && a <= buf[1] && buf[1] <= z)
 			buf[0] += a - A;
+#if defined(__HAIKU__)
+		printf("\t%d: \"%s\",\n", e == 0 ? 0 : e+0x80000001, buf);
+#else
 		printf("\t%d: \"%s\",\n", e, buf);
+#endif
 	}
 	printf("}\n\n");
 	

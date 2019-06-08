@@ -252,16 +252,7 @@ func (w WaitStatus) StopSignal() Signal {
 
 func (w WaitStatus) TrapCause() int { return -1 }
 
-// sys wait4(pid uintptr, wstatus *WaitStatus, options uintptr, rusage *Rusage) (wpid int, err uintptr) = libroot.waitpid
-
-func Wait4(pid int, wstatus *WaitStatus, options int, rusage *Rusage) (wpid int, err error) {
-	r0, _, e1 := sysvicall6(procwaitpid.Addr(), 3, uintptr(pid), uintptr(unsafe.Pointer(wstatus)), uintptr(options), uintptr(unsafe.Pointer(rusage)), 0, 0)
-	wpid = int(r0)
-	if e1 != 0 {
-		err = Errno(e1)
-	}
-	return wpid, err
-}
+//sys Wait4(pid int32, wstatus *WaitStatus, options uintptr, rusage *Rusage) (wpid int, err error) = libroot.waitpid
 
 func gethostname() (name string, err uintptr)
 
