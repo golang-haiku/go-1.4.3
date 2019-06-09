@@ -73,6 +73,9 @@ runtime·sysAlloc(uintptr n, uint64 *stat)
 void
 runtime·SysUnused(void *v, uintptr n)
 {
+	USED(v);
+	USED(n);
+
 	/*runtime·madvise(v, n, MADV_DONTNEED);*/
 }
 

@@ -33,7 +33,7 @@
 #pragma dynimport libc·munmap munmap "libroot.so"
 #pragma dynimport libc·open open "libroot.so"
 #pragma dynimport libc·pthread_attr_destroy pthread_attr_destroy "libroot.so"
-#pragma dynimport libc·pthread_attr_getstacksize pthread_attr_getstacksize "libroot.so"
+#pragma dynimport libc·pthread_attr_getstack pthread_attr_getstack "libroot.so"
 #pragma dynimport libc·pthread_attr_init pthread_attr_init "libroot.so"
 #pragma dynimport libc·pthread_attr_setdetachstate pthread_attr_setdetachstate "libroot.so"
 #pragma dynimport libc·pthread_attr_setstack pthread_attr_setstack "libroot.so"
@@ -67,7 +67,7 @@ extern uintptr libc·mmap;
 extern uintptr libc·munmap;
 extern uintptr libc·open;
 extern uintptr libc·pthread_attr_destroy;
-extern uintptr libc·pthread_attr_getstacksize;
+extern uintptr libc·pthread_attr_getstack;
 extern uintptr libc·pthread_attr_init;
 extern uintptr libc·pthread_attr_setdetachstate;
 extern uintptr libc·pthread_attr_setstack;
@@ -93,7 +93,7 @@ void	runtime·getcontext(Ucontext *context);
 int32	runtime·pthread_attr_destroy(PthreadAttr* attr);
 int32	runtime·pthread_attr_init(PthreadAttr* attr);
 //TODO: uint32/uint64 problem needs to be solved
-int32	runtime·pthread_attr_getstacksize(PthreadAttr* attr, uintptr* size);
+int32	runtime·pthread_attr_getstack(PthreadAttr* attr, void** addr, uint64* size);
 int32	runtime·pthread_attr_setdetachstate(PthreadAttr* attr, int32 state);
 int32	runtime·pthread_attr_setstack(PthreadAttr* attr, void* addr, uint32 size);
 int32	runtime·pthread_create(Pthread* thread, PthreadAttr* attr, void(*fn)(void), void *arg);
@@ -137,20 +137,18 @@ runtime·newosproc(M *mp, void *stk)
 	USED(stk);
 	if(runtime·pthread_attr_init(&attr) != 0)
 		runtime·throw("pthread_attr_init");
-	//if(runtime·pthread_attr_setstack(&attr, 0, 0x200000) != 0)
-	//	runtime·throw("pthread_attr_setstack");
-	//if(runtime·pthread_attr_getstack(&attr, (void**)&mp->g0->stackbase, &mp->g0->stacksize) != 0)
-	//	runtime·throw("pthread_attr_getstack");
-	
-	if(runtime·pthread_attr_getstacksize(&attr, &mp->g0->stack.hi) != 0)
-		runtime·throw("pthread_attr_getstacksize");
+	if(runtime·pthread_attr_setstack(&attr, 0, 0x200000) != 0)
+		runtime·throw("pthread_attr_setstack");
+	size = 0;
+	if(runtime·pthread_attr_getstack(&attr, (void**)&mp->g0->stack.hi, &size) != 0)
+		runtime·throw("pthread_attr_getstack");
+	mp->g0->stack.lo = mp->g0->stack.hi - size;
 	if(runtime·pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED) != 0)
 		runtime·throw("pthread_attr_setdetachstate");
 
 	// Disable signals during create, so that the new thread starts
 	// with signals disabled.  It will enable them in minit.
 	runtime·sigprocmask(SIG_SETMASK, &sigset_all, &oset);
-	mp->g0->stack.hi = 0xdeadf00d;
 	ret = runtime·pthread_create(&tid, &attr, (void (*)(void))runtime·tstart_sysvicall, mp);
 	runtime·sigprocmask(SIG_SETMASK, &oset, nil);
 	if(ret != 0) {
@@ -465,9 +463,9 @@ runtime·pthread_attr_destroy(PthreadAttr* attr)
 }
 
 int32
-runtime·pthread_attr_getstacksize(PthreadAttr* attr, uintptr* size)
+runtime·pthread_attr_getstack(PthreadAttr* attr, void** addr, uint64* size)
 {
-	return runtime·sysvicall2(FUNC(libc·pthread_attr_getstacksize), (uintptr)attr, (uintptr)size);
+	return runtime·sysvicall3(libc·pthread_attr_getstack, (uintptr)attr, (uintptr)addr, (uintptr)size);
 }
 
 int32
